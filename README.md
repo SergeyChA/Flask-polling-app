@@ -2,9 +2,9 @@ Polling application
 
 Stack:
 
-Python
-Flask
-SQLAlchemy
-PostgreSQL
+- Python
+- Flask
+- SQLAlchemy
+- PostgreSQL
 
 
