@@ -1,8 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-
-
-db = SQLAlchemy()
+from pollingsite import db
 
 
 class User(db.Model):
