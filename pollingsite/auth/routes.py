@@ -1,52 +1,26 @@
 from flask import (
     Blueprint,
-    request,
-    render_template
+    render_template,
+    redirect,
+    url_for,
+    flash,
 )
 from pollingsite import db, bcrypt
-from pollingsite.forms import FormSingup
+from pollingsite.forms import FormSingup, FormLogin
 from pollingsite.models import User
+from flask_login import login_user, logout_user
 
 
 auth = Blueprint('auth', __name__)
 
 
-def format_user(user: User) -> dict:
-    return {
-        "id": user.id,
-        "username": user.username,
-        "email": user.email,
-        "created_at": user.created_at,
-    }
-
-
-@auth.route("/user/<int:id>")
-def get_user(id):
-    user = User.query.filter(User.id == id).first()
-    return format_user(user)
-
-
-# @auth.route("/singup", methods=["POST"])
-# def create_user():
-#     user = request.json
-#     user["password"] = (
-#         bcrypt
-#         .generate_password_hash(user["password"])
-#         .decode("utf-8")
-#     )
-#     new_user = User(**user)
-#     db.session.add(new_user)
-#     db.session.commit()
-#     db.session.refresh(new_user)
-#     return format_user(new_user)
-
 @auth.route("/singup", methods=["GET", "POST"])
-def create_user():
-    form = FormSingup(request.form)
+def register():
+    form = FormSingup()
     if form.validate_on_submit():
-        form.data["password"] = (
+        form.password.data = (
             bcrypt
-            .generate_password_hash(form.data["password"])
+            .generate_password_hash(form.password.data)
             .decode("utf-8")
         )
         new_user = User(
@@ -56,16 +30,29 @@ def create_user():
         )
         db.session.add(new_user)
         db.session.commit()
-        db.session.refresh(new_user)
-        return format_user(new_user)
-    return render_template("singup.html", form=form)
+        flash('Your account has been created!', 'success')
+        return redirect(url_for('auth.login'))
+    return render_template("singup.html", title="Sing up", form=form)
 
 
-@auth.route("/login", methods=["POST"])
-def login_user():
-    form = request.json
-    user = User.query.filter(User.email == form["email"]).first()
-    if user:
-        if bcrypt.check_password_hash(user.password, form["password"]):
-            return {"message": "Logged in successfully."}
-    return {"message": "Bad email or password"}
+@auth.route("/login", methods=["GET", "POST"])
+def login():
+    form = FormLogin()
+    if form.validate_on_submit():
+        user = db.session.execute(
+            db.select(User).filter(User.email == form.email.data)
+        ).scalar()
+        if user and bcrypt.check_password_hash(
+            user.password, form.password.data
+        ):
+            login_user(user, remember=form.remember.data)
+            return redirect(url_for("account.profile"))
+        else:
+            flash('Login Error. Please check email and password', 'danger')
+    return render_template("login.html", title="Login", form=form)
+
+
+@auth.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('main.home'))

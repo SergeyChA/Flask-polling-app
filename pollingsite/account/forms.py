@@ -1,35 +1,24 @@
 from flask_wtf import FlaskForm
-from wtforms import (
-    StringField,
-    PasswordField,
-    ValidationError,
-    BooleanField,
-    SubmitField,
-)
+from flask_wtf.file import FileField, FileAllowed
+from wtforms import StringField, SubmitField
 from wtforms.validators import (
     DataRequired,
-    Email,
     Length,
-    EqualTo,
+    Email,
+    ValidationError,
 )
 from pollingsite.models import User, db
 
 
-class Base(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField(
-        'Password', validators=[DataRequired(), Length(min=6)]
+class FormAccountUpdate(FlaskForm):
+    username = StringField('Username',
+                           validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    picture = FileField(
+        'Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])]
     )
-    submit = SubmitField('Sing up')
-
-
-class FormSingup(Base):
-    username = StringField(
-        'Username', validators=[DataRequired(), Length(min=3, max=30)]
-    )
-    confirm_password = PasswordField(
-        'Confirm Password', validators=[DataRequired(), EqualTo('password')]
-    )
+    submit = SubmitField('Update')
 
     def validate_username(self, username):
         user = db.session.execute(
@@ -48,8 +37,3 @@ class FormSingup(Base):
             raise ValidationError(
                 'That email is taken. Please choose a different one.'
             )
-
-
-class FormLogin(Base):
-    remember = BooleanField('Remember Me')
-    submit = SubmitField('Login')

@@ -2,10 +2,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from pollingsite import config
-
+from flask_login import LoginManager
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
+login_manager = LoginManager()
 
 
 def create_app():
@@ -13,13 +14,12 @@ def create_app():
     app.config.from_object(config)
     db.init_app(app)
     bcrypt.init_app(app)
-    # Create Tables
-    # with app.app_context():
-    #     db.create_all()
-
-    from pollingsite.home.routes import home
+    login_manager.init_app(app)
+    from pollingsite.main.routes import main
     from pollingsite.auth.routes import auth
-    app.register_blueprint(home)
+    from pollingsite.account.routes import account
+    app.register_blueprint(main)
     app.register_blueprint(auth)
+    app.register_blueprint(account)
 
     return app
