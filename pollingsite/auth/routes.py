@@ -6,7 +6,7 @@ from flask import (
     flash,
 )
 from pollingsite import db, bcrypt
-from pollingsite.forms import FormSingup, FormLogin
+from pollingsite.auth.forms import FormSingup, FormLogin
 from pollingsite.models import User
 from flask_login import login_user, logout_user
 

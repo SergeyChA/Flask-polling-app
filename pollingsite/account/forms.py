@@ -8,6 +8,7 @@ from wtforms.validators import (
     ValidationError,
 )
 from pollingsite.models import User, db
+from flask_login import current_user
 
 
 class FormAccountUpdate(FlaskForm):
@@ -21,19 +22,21 @@ class FormAccountUpdate(FlaskForm):
     submit = SubmitField('Update')
 
     def validate_username(self, username):
-        user = db.session.execute(
-            db.select(User).filter(User.username == username.data)
-        ).scalar()
-        if user:
-            raise ValidationError(
-                'That username is taken. Please choose a different one.'
-            )
+        if current_user.username != username.data:
+            user = db.session.execute(
+                db.select(User).filter(User.username == username.data)
+            ).scalar()
+            if user:
+                raise ValidationError(
+                    'That username is taken. Please choose a different one.'
+                )
 
     def validate_email(self, email):
-        user = db.session.execute(
-            db.select(User).filter(User.email == email.data)
-        ).scalar()
-        if user:
-            raise ValidationError(
-                'That email is taken. Please choose a different one.'
-            )
+        if current_user.email != email.data:
+            user = db.session.execute(
+                db.select(User).filter(User.email == email.data)
+            ).scalar()
+            if user:
+                raise ValidationError(
+                    'That email is taken. Please choose a different one.'
+                )

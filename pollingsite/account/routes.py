@@ -21,8 +21,8 @@ def profile():
     form = FormAccountUpdate()
     if form.validate_on_submit():
         if form.picture.data:
-            picture_file = save_picture(form.picture.data)
-            current_user.image_avatar = picture_file
+            picture_file = form.picture.data
+            current_user.image_avatar = save_picture(picture_file)
         current_user.username = form.username.data
         current_user.email = form.email.data
         db.session.commit()
