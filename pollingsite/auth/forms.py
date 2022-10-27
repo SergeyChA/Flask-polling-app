@@ -16,19 +16,19 @@ from pollingsite.models import User, db
 
 
 class Base(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('Почта', validators=[DataRequired(), Email()])
     password = PasswordField(
-        'Password', validators=[DataRequired(), Length(min=6)]
+        'Пароль', validators=[DataRequired(), Length(min=6)]
     )
-    submit = SubmitField('Sing up')
+    submit = SubmitField('Регистрация')
 
 
 class FormSingup(Base):
     username = StringField(
-        'Username', validators=[DataRequired(), Length(min=3, max=30)]
+        'Имя', validators=[DataRequired(), Length(min=3, max=30)]
     )
     confirm_password = PasswordField(
-        'Confirm Password', validators=[DataRequired(), EqualTo('password')]
+        'Повторите пароль', validators=[DataRequired(), EqualTo('password')]
     )
 
     def validate_username(self, username):
@@ -36,20 +36,16 @@ class FormSingup(Base):
             db.select(User).filter(User.username == username.data)
         ).scalar()
         if user:
-            raise ValidationError(
-                'That username is taken. Please choose a different one.'
-            )
+            raise ValidationError('Такое имя уже занято')
 
     def validate_email(self, email):
         user = db.session.execute(
             db.select(User).filter(User.email == email.data)
         ).scalar()
         if user:
-            raise ValidationError(
-                'That email is taken. Please choose a different one.'
-            )
+            raise ValidationError('Такая почта иже занята')
 
 
 class FormLogin(Base):
-    remember = BooleanField('Remember Me')
-    submit = SubmitField('Login')
+    remember = BooleanField('Запомнить меня')
+    submit = SubmitField('Войти')

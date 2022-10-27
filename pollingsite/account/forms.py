@@ -12,14 +12,14 @@ from flask_login import current_user
 
 
 class FormAccountUpdate(FlaskForm):
-    username = StringField('Username',
+    username = StringField('Имя',
                            validators=[DataRequired(), Length(min=2, max=20)])
-    email = StringField('Email',
+    email = StringField('Почта',
                         validators=[DataRequired(), Email()])
     picture = FileField(
-        'Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])]
+        'Изменить фото', validators=[FileAllowed(['jpg', 'png'])]
     )
-    submit = SubmitField('Update')
+    submit = SubmitField('Обновить')
 
     def validate_username(self, username):
         if current_user.username != username.data:
@@ -27,9 +27,7 @@ class FormAccountUpdate(FlaskForm):
                 db.select(User).filter(User.username == username.data)
             ).scalar()
             if user:
-                raise ValidationError(
-                    'That username is taken. Please choose a different one.'
-                )
+                raise ValidationError('Такое имя уже занято')
 
     def validate_email(self, email):
         if current_user.email != email.data:
@@ -37,6 +35,4 @@ class FormAccountUpdate(FlaskForm):
                 db.select(User).filter(User.email == email.data)
             ).scalar()
             if user:
-                raise ValidationError(
-                    'That email is taken. Please choose a different one.'
-                )
+                raise ValidationError('Такая почта уже занята')

@@ -46,17 +46,17 @@
             <div class="navbar-nav">
               {% if current_user.is_authenticated %}
               <a class="nav-item nav-link" href="{{ url_for('account.profile') }}"
-                >Account</a
+                >Личный кабинет</a
               >
               <a class="nav-item nav-link" href="{{ url_for('auth.logout') }}"
-                >Logout</a
+                >Выйти</a
               >
               {% else %}
               <a class="nav-item nav-link" href="{{ url_for('auth.login') }}"
-                >Login</a
+                >Войти</a
               >
               <a class="nav-item nav-link" href="{{ url_for('auth.register') }}"
-                >Register</a
+                >Регистрация</a
               >
               {% endif %}
             </div>

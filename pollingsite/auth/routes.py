@@ -30,7 +30,7 @@ def register():
         )
         db.session.add(new_user)
         db.session.commit()
-        flash('Your account has been created!', 'success')
+        flash('Вы зарегистрированы!', 'success')
         return redirect(url_for('auth.login'))
     return render_template("singup.html", title="Sing up", form=form)
 
@@ -48,7 +48,7 @@ def login():
             login_user(user, remember=form.remember.data)
             return redirect(url_for("account.profile"))
         else:
-            flash('Login Error. Please check email and password', 'danger')
+            flash('Ошибка. Неверный пароль или почта', 'danger')
     return render_template("login.html", title="Login", form=form)
 
 

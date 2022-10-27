@@ -26,7 +26,7 @@ def profile():
         current_user.username = form.username.data
         current_user.email = form.email.data
         db.session.commit()
-        flash('Your account has been updated!', 'success')
+        flash('Ваши данные обновлены', 'success')
         return redirect(url_for('account.profile'))
     elif request.method == 'GET':
         form.username.data = current_user.username

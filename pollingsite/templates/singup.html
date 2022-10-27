@@ -4,7 +4,7 @@
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Sing Up</legend>
+                <legend class="border-bottom mb-4">Регистрация</legend>
                 <div class="form-group">
                     {{ form.username.label(class="form-control-label") }}
 
@@ -50,9 +50,7 @@
                     {% if form.confirm_password.errors %}
                         {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in form.confirm_password.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
+                            <span>Пароли не совпадают</span>
                         </div>
                     {% else %}
                         {{ form.confirm_password(class="form-control form-control-lg") }}
@@ -66,7 +64,7 @@
     </div>
     <div class="border-top pt-3">
         <small class="text-muted">
-            Already Have An Account? <a class="ml-2" href="{{ url_for('auth.login') }}">Log In</a>
+            Есть личный кабинет? <a class="ml-2" href="{{ url_for('auth.login') }}">Вход</a>
         </small>
     </div>
 {% endblock content %}
