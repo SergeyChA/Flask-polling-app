@@ -32,7 +32,7 @@ def register():
         db.session.commit()
         flash('Вы зарегистрированы!', 'success')
         return redirect(url_for('auth.login'))
-    return render_template("singup.html", title="Sing up", form=form)
+    return render_template("singup.html", title="Регистрация", form=form)
 
 
 @auth.route("/login", methods=["GET", "POST"])
@@ -49,7 +49,7 @@ def login():
             return redirect(url_for("account.profile"))
         else:
             flash('Ошибка. Неверный пароль или почта', 'danger')
-    return render_template("login.html", title="Login", form=form)
+    return render_template("login.html", title="Авторизация", form=form)
 
 
 @auth.route("/logout")
