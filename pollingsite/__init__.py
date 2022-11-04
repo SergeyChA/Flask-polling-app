@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from pollingsite import config
 from flask_login import LoginManager
 
 db = SQLAlchemy()
@@ -9,7 +8,7 @@ bcrypt = Bcrypt()
 login_manager = LoginManager()
 
 
-def create_app():
+def create_app(config):
     app = Flask(__name__)
     app.config.from_object(config)
     db.init_app(app)

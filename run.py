@@ -1,7 +1,7 @@
-from pollingsite import create_app, db
+from pollingsite import create_app, db, config
 
 
-app = create_app()
+app = create_app(config)
 
 # Create Tables
 with app.app_context():

@@ -6,5 +6,5 @@ Stack:
 - Flask
 - SQLAlchemy
 - PostgreSQL
-
+- Pytest
 

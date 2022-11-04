@@ -16,19 +16,36 @@ from pollingsite.models import User, db
 
 
 class Base(FlaskForm):
-    email = StringField('Почта', validators=[DataRequired(), Email()])
+    email = StringField(
+        'Почта',
+        validators=[
+            DataRequired(message='Введите почту'),
+            Email(message='Неверная почта')]
+    )
     password = PasswordField(
-        'Пароль', validators=[DataRequired(), Length(min=6)]
+        'Пароль',
+        validators=[
+            DataRequired(message='Введите пароль'),
+            Length(min=6, message='Пароль должен быть не менее 6 символов')
+        ]
     )
     submit = SubmitField('Регистрация')
 
 
 class FormSingup(Base):
     username = StringField(
-        'Имя', validators=[DataRequired(), Length(min=3, max=30)]
+        'Имя',
+        validators=[
+            DataRequired(message='Введите имя'),
+            Length(min=3, max=30, message='Имя должно быть от 3 до 30 символов')
+        ]
     )
     confirm_password = PasswordField(
-        'Повторите пароль', validators=[DataRequired(), EqualTo('password')]
+        'Повторите пароль',
+        validators=[
+            DataRequired(message='Повторите пароль'),
+            EqualTo('password', message='Пароли не совпадают')
+        ]
     )
 
     def validate_username(self, username):
@@ -43,7 +60,7 @@ class FormSingup(Base):
             db.select(User).filter(User.email == email.data)
         ).scalar()
         if user:
-            raise ValidationError('Такая почта иже занята')
+            raise ValidationError('Такая почта уже занята')
 
 
 class FormLogin(Base):
