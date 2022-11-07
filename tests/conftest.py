@@ -22,7 +22,7 @@ def init_database(test_client):
     db.drop_all()
     db.create_all()
     # Insert user data
-    user = User(
+    user1 = User(
         email='test@mail.ru',
         password=(
             bcrypt
@@ -31,6 +31,16 @@ def init_database(test_client):
         ),
         username='test'
     )
-    db.session.add(user)
+    user2 = User(
+        email='user@mail.ru',
+        password=(
+            bcrypt
+            .generate_password_hash('password')
+            .decode("utf-8")
+        ),
+        username='user'
+    )
+    db.session.add(user1)
+    db.session.add(user2)
     db.session.commit()
     yield  # this is where the testing happens!

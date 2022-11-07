@@ -12,12 +12,30 @@ from flask_login import current_user
 
 
 class FormAccountUpdate(FlaskForm):
-    username = StringField('Имя',
-                           validators=[DataRequired(), Length(min=2, max=20)])
-    email = StringField('Почта',
-                        validators=[DataRequired(), Email()])
+    username = StringField(
+        'Имя',
+        validators=[
+            DataRequired(message='Введите имя'),
+            Length(
+                min=3,
+                max=30,
+                message='Имя должно быть от 3 до 30 символов'
+            )
+        ]
+    )
+    email = StringField(
+        'Почта',
+        validators=[
+            DataRequired(message='Введите почту'),
+            Email(message='Неверная почта')]
+    )
     picture = FileField(
-        'Изменить фото', validators=[FileAllowed(['jpg', 'png'])]
+        'Изменить фото',
+        validators=[
+            FileAllowed(
+                ['jpg', 'png'],
+                message='Формат изображения только jpg, png')
+        ]
     )
     submit = SubmitField('Обновить')
 

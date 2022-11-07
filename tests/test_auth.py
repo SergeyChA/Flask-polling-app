@@ -39,7 +39,7 @@ def test_login_input(test_client, init_database, email, password, message):
     assert message in response.text
 
 
-def test_registration(test_client, init_database,):
+def test_registration(test_client, init_database):
     response = test_client.post(
         '/singup',
         data={
@@ -55,7 +55,7 @@ def test_registration(test_client, init_database,):
     user = db.session.execute(
         db.select(User).filter(User.username == 'example')
     ).scalar()
-    assert user.username == 'example'
+    assert str(user) == 'example'
     assert user.email == 'test1@mail.ru'
 
 

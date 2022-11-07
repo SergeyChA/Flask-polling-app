@@ -37,7 +37,11 @@ class FormSingup(Base):
         'Имя',
         validators=[
             DataRequired(message='Введите имя'),
-            Length(min=3, max=30, message='Имя должно быть от 3 до 30 символов')
+            Length(
+                min=3,
+                max=30,
+                message='Имя должно быть от 3 до 30 символов'
+            )
         ]
     )
     confirm_password = PasswordField(
