@@ -1,6 +1,6 @@
-Polling application
+Сайт для опросов.
 
-Stack:
+Инструменты:
 
 - Python
 - Flask
